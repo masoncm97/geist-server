@@ -70,18 +70,6 @@ async function handleChat(
       console.log(message.content);
     });
 
-    // while (timeElapsed < timeout) {
-    //   const retrievedRun = await server.openai.beta.threads.runs.retrieve(server.thread.id, run.status);
-    //   if (run.status === "completed") {
-    //     const messagesFromThread =
-    //       await server.openai.beta.threads.messages.list(server.thread.id);
-    //     resolve({ runResult: run, messages: messagesFromThread });
-    //     return;
-    //   }
-    //   await new Promise((resolve) => setTimeout(resolve, interval));
-    //   timeElapsed += interval;
-    // }
-
     //  return { response: "" };
   } catch (err) {
     server.log.error("Plugin: OpenAi, error on register", err);

@@ -1,8 +1,8 @@
 import { FastifyInstance } from "fastify";
 import { OpenAI } from "openai";
 import { Assistant } from "openai/resources/beta/assistants/assistants";
-import "dotenv/config";
 import { Thread } from "openai/resources/beta/threads/threads";
+import "dotenv/config";
 
 export async function registerOpenAi(server: FastifyInstance) {
   try {
@@ -15,6 +15,7 @@ export async function registerOpenAi(server: FastifyInstance) {
       file_ids: ["file-SJU3WkZ9yPPuWY1dZyJxgzLg"],
       model: "gpt-3.5-turbo-0125",
     })) as Assistant;
+
     const thread = (await openai.beta.threads.create()) as Thread;
 
     server.decorate("geist", geist);

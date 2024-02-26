@@ -36,8 +36,7 @@ const configPlugin: FastifyPluginAsync = async (server) => {
         JSON.stringify(validate.errors, null, 2)
     );
   }
-  server.log.info("Successfully registered Config Plugin");
-  // server.decorate("config", process.env);
+  server.log.info("Successfully validated Config");
 };
 
 declare module "fastify" {

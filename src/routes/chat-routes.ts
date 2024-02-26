@@ -56,7 +56,7 @@ async function handleChat(
         "You're name is Geist. You are an assistant who has memorized all of Hegel's 'The Phenomenology of Spirit' and can answer any question pertaining to it.",
     });
 
-    const result = await pRetry(() => getMessage(server, run), { retries: 5 });
+    const result = await pRetry(() => getMessage(server, run), { retries: 10 });
 
     if (!result) {
       throw Error("fuck");

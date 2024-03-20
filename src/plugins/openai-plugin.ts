@@ -1,6 +1,5 @@
 import { FastifyInstance } from "fastify";
 import { OpenAI } from "openai";
-import { Assistant } from "openai/resources/beta/assistants/assistants";
 import { Thread } from "openai/resources/beta/threads/threads";
 import "dotenv/config";
 import { getAssistant } from "../helper/openai";

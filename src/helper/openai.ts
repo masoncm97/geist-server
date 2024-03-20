@@ -50,6 +50,7 @@ export const sendMessage = async (
   if (!result) {
     throw Error("fuck");
   }
+
   const threadMessages = await server.openai.beta.threads.messages.list(
     server.thread.id
   );
@@ -98,7 +99,6 @@ export async function getAssistant(
       }
     );
 
-    // Handle response here
     return response.data;
   } catch (err) {
     server.log.error(err.message);

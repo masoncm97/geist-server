@@ -1,0 +1,10 @@
+services:
+  webapp:
+    build: .
+    ports:
+      - "8080:8080"
+  db:
+    image: postgres
+    restart: always
+    volumes:
+      - ./geist_data:/var/lib/postgresql/data

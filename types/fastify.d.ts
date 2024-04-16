@@ -29,6 +29,12 @@ interface OpenAiRequest extends FastifyRequest {
   };
 }
 
+interface PaginateRequest extends FastifyRequest {
+  body: {
+    cursor: number;
+  };
+}
+
 interface Chatbot {
   bot: Assistant;
   id: string;

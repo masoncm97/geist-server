@@ -93,9 +93,10 @@ async function handleStartConversation(
       },
     });
 
-    const task = schedule("* * * * *", () => {
+    const task = schedule("0 8-20 * * *", () => {
       processConversation(server, reply);
     });
+
     server.conversationTask = task;
 
     return { response: initMessage };
@@ -148,6 +149,8 @@ async function processConversation(
         id: "desc",
       },
     });
+
+    server.log.info("Processing new conversation");
 
     // Add custom error here
     if (!previousConversation) {

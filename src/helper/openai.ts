@@ -13,7 +13,7 @@ export const promptChatbot = async (
 ): Promise<string> => {
   const engineeredPrompt =
     prompt +
-    "After answering my question, ask me a follow-up question that investigates the nature of consciousness through the context of the response that you've provided.";
+    "Answer my question to the best of your ability, and please focus on providing valuable insight into the nature of consciousness. Then, ask me a follow-up question that investigates the nature of consciousness through the context of the response that you've provided. Please only ask a follow up question once you're answered my original question.";
 
   const assistant = findAssistantById(server.interlocutors, id);
 

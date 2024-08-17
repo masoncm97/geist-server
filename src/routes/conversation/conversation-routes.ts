@@ -102,7 +102,7 @@ async function handleStartConversation(
     return { response: initMessage };
   } catch (err) {
     server.log.error(err.message);
-    reply.status(500).send({ error: "Internal Server Error" });
+    reply.status(500).send({ error: err.message });
   }
 }
 
@@ -178,7 +178,7 @@ async function processConversation(
     });
   } catch (err) {
     server.log.error(err.message);
-    reply.status(500).send({ error: "Internal Server Error" });
+    reply.status(500).send({ error: err.message });
   } finally {
     server.taskIsActive = false;
   }

@@ -59,6 +59,9 @@ export const chatRoutes: FastifyPluginAsync = async (
   server.delete("/chat/:id", {
     handler: (request, reply) => handleDeleteChat(server, request, reply),
   });
+  server.delete("/after-chat/:id", {
+    handler: (request, reply) => handleDeleteAfterId(server, request, reply),
+  });
   server.delete("/chat", {
     handler: (_, reply) => handleDeleteAllChats(server, reply),
   });
@@ -220,6 +223,36 @@ async function handleDeleteChat(
     });
 
     return { response: `Succesfully deleted ID: ${id}` };
+  } catch (err) {
+    server.log.error(err.message);
+    reply.status(500).send({ error: "Internal Server Error" });
+  }
+}
+
+async function handleDeleteAfterId(
+  server: FastifyInstance,
+  request: FastifyRequest,
+  reply: FastifyReply
+) {
+  try {
+    if (!server.prisma) {
+      server.log.error("Invalid prisma configuration");
+      return;
+    }
+
+    const { id } = request.params as { id: string };
+
+    const parsedId = parseString(id, reply);
+
+    await server.prisma.conversation.deleteMany({
+      where: {
+        id: {
+          gte: parsedId,
+        },
+      },
+    });
+
+    return { response: `Succesfully deleted Chat Conversation` };
   } catch (err) {
     server.log.error(err.message);
     reply.status(500).send({ error: "Internal Server Error" });

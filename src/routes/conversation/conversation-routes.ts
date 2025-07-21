@@ -66,6 +66,7 @@ async function handleStartConversation(
       server.log.error("Invalid openAi configuration");
       return;
     }
+    
     if (server.conversationTask) {
       return reply.send({
         error: "Conversation process is already active.",

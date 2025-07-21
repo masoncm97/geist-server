@@ -6,6 +6,31 @@ import { Assistant } from "openai/resources/beta/assistants/assistants";
 import { findAssistantById, removeLenticularBrackets } from "./utility";
 import axios from "axios";
 
+// Define our own interface that matches the actual API response
+interface AssistantResponse {
+  id: string;
+  object: string;
+  created_at: number;
+  name: string;
+  description: string | null;
+  model: string;
+  instructions: string;
+  tools: Array<{
+    type: string;
+    file_search?: {};
+  }>;
+  top_p: number;
+  temperature: number;
+  reasoning_effort: string | null;
+  tool_resources: {
+    file_search: {
+      vector_store_ids: string[];
+    };
+  };
+  metadata: Record<string, any>;
+  response_format: string;
+}
+
 export const promptChatbot = async (
   server: FastifyInstance,
   prompt: string,
@@ -86,21 +111,24 @@ export const getResponse = async (server: FastifyInstance, run: Run) => {
 export async function getAssistant(
   server: FastifyInstance,
   assistantId: string
-): Promise<Assistant> {
+): Promise<AssistantResponse> {
   try {
-    const response = await axios.get(
+    const response = await axios.get<AssistantResponse>(
       `https://api.openai.com/v1/assistants/${assistantId}`,
       {
         headers: {
           "Content-Type": "application/json",
           Authorization: `Bearer ${process.env["OPENAI_API_KEY"]}`,
-          "OpenAI-Beta": "assistants=v1",
+          "OpenAI-Beta": "assistants=v2",
         },
       }
     );
 
+    server.log.info(`Successfully retrieved assistant: ${response.data.name}`);
+    
     return response.data;
   } catch (err) {
-    server.log.error(err.message);
+    server.log.error(`Failed to retrieve assistant ${assistantId}:`, err.message);
+    throw err; // Re-throw the error so the calling code knows something went wrong
   }
 }

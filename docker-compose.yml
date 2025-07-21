@@ -3,8 +3,28 @@ services:
     build: .
     ports:
       - "8080:8080"
+    depends_on:
+      db:
+        condition: service_healthy
+    environment:
+      - DATABASE_URL=${POSTGRES_URL}
+      - OPENAI_API_KEY=${OPENAI_API_KEY}
+      - SARTRE=${SARTRE}
+      - HEGEL=${HEGEL}
+      - NODE_ENV=${NODE_ENV}
+      - LOG_LEVEL=${LOG_LEVEL}
+    restart: unless-stopped
   db:
-    image: postgres
+    image: postgres:14
     restart: always
+    environment:
+      - POSTGRES_USER=masonmathai
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+      - POSTGRES_DB=geist_data
     volumes:
       - ./geist_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U masonmathai -d geist_data"]
+      interval: 5s
+      timeout: 5s
+      retries: 5

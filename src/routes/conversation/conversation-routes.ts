@@ -35,6 +35,18 @@ export const conversationRoutes: FastifyPluginAsync = async (
     },
     handler: (request, reply) => handleStopConversation(server, request, reply),
   });
+  server.get("/conversation-status", {
+    schema: {
+      response: {
+        200: Type.Object({
+          status: Type.String(),
+          taskActive: Type.Boolean(),
+          hasScheduledTask: Type.Boolean(),
+        }),
+      },
+    },
+    handler: (request, reply) => handleGetConversationStatus(server, request, reply),
+  });
 };
 
 const getAllSchema = {
@@ -125,6 +137,35 @@ async function handleStopConversation(
     server.conversationTask = null;
     return {
       response: "Conversation process stopped successfully.",
+    };
+  } catch (err) {
+    server.log.error(err.message);
+    reply.status(500).send({ error: "Internal Server Error" });
+  }
+}
+
+async function handleGetConversationStatus(
+  server: FastifyInstance,
+  request: FastifyRequest,
+  reply: FastifyReply
+) {
+  try {
+    const hasScheduledTask = !!server.conversationTask;
+    const taskActive = !!server.taskIsActive;
+    
+    let status: string;
+    if (!hasScheduledTask) {
+      status = "stopped";
+    } else if (taskActive) {
+      status = "processing";
+    } else {
+      status = "running";
+    }
+
+    return {
+      status,
+      taskActive,
+      hasScheduledTask,
     };
   } catch (err) {
     server.log.error(err.message);

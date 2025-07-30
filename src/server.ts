@@ -5,6 +5,7 @@ import config from "./plugins/config";
 import cors from "@fastify/cors";
 import prismaClient from "./plugins/prisma-plugin";
 import { conversationRoutes } from "./routes/conversation/conversation-routes";
+import authPlugin from "./plugins/auth-plugin";
 /**
  * @type {import('fastify').FastifyInstance} Instance of Fastify
  */
@@ -15,8 +16,12 @@ const createServer = async () => {
   });
 
   await server.register(config);
-  await server.register(cors, { origin: "*" });
+  await server.register(cors, { 
+    origin: process.env.NODE_ENV === 'production' ? false : "*",
+    credentials: true 
+  });
   await server.register(prismaClient);
+  await server.register(authPlugin);
 
   await registerOpenAi(server);
 

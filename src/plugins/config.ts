@@ -14,6 +14,7 @@ const ConfigSchema = Type.Strict(
   Type.Object({
     NODE_ENV: Type.Enum(NodeEnv),
     OPENAI_API_KEY: Type.String(),
+    API_KEY: Type.Optional(Type.String()),
   })
 );
 
@@ -36,7 +37,10 @@ const configPlugin: FastifyPluginAsync = async (server) => {
         JSON.stringify(validate.errors, null, 2)
     );
   }
+  
+  server.decorate('config', process.env as Config);
   server.log.info("Successfully validated Config");
+  server.log.info(`API_KEY loaded: ${!!(process.env.API_KEY)}`);
 };
 
 declare module "fastify" {

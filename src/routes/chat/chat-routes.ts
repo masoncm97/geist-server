@@ -13,6 +13,7 @@ export const chatRoutes: FastifyPluginAsync = async (
   server: FastifyInstance
 ) => {
   server.post("/chat", {
+    preHandler: server.authenticate,
     schema: {
       request: {
         body: Type.Object({
@@ -28,6 +29,7 @@ export const chatRoutes: FastifyPluginAsync = async (
     handler: (request, reply) => handleChat(server, request, reply),
   });
   server.get("/chat", {
+    preHandler: server.authenticate,
     schema: {
       response: {
         200: getMultipleSchema,
@@ -36,6 +38,7 @@ export const chatRoutes: FastifyPluginAsync = async (
     handler: (_, reply) => handleGetChat(server, reply),
   });
   server.get("/latest-chat", {
+    preHandler: server.authenticate,
     schema: {
       response: {
         200: getSingleSchema,
@@ -44,6 +47,7 @@ export const chatRoutes: FastifyPluginAsync = async (
     handler: (_, reply) => handleGetLatestChat(server, reply),
   });
   server.post("/paginate-chat", {
+    preHandler: server.authenticate,
     schema: {
       request: {
         body: Type.Object({
@@ -57,12 +61,15 @@ export const chatRoutes: FastifyPluginAsync = async (
     handler: (request, reply) => handleGetPaginateChat(server, request, reply),
   });
   server.delete("/chat/:id", {
+    preHandler: server.authenticate,
     handler: (request, reply) => handleDeleteChat(server, request, reply),
   });
   server.delete("/after-chat/:id", {
+    preHandler: server.authenticate,
     handler: (request, reply) => handleDeleteAfterId(server, request, reply),
   });
   server.delete("/chat", {
+    preHandler: server.authenticate,
     handler: (_, reply) => handleDeleteAllChats(server, reply),
   });
 };

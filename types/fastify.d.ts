@@ -3,6 +3,7 @@ import { Assistant } from "openai/resources/beta/assistants/assistants";
 import { Thread } from "openai/resources/beta/threads/threads";
 import { PrismaClient } from "../prisma/generated/client";
 import { ScheduledTask } from "node-cron";
+import { FastifyRequest, FastifyReply } from "fastify";
 
 declare module "fastify" {
   interface FastifyInstance {
@@ -14,6 +15,8 @@ declare module "fastify" {
     conversationIsActive: boolean;
     taskIsActive: boolean;
     conversationTask: ScheduledTask | null;
+    authenticate: (request: FastifyRequest, reply: FastifyReply) => Promise<void>;
+    optionalAuth: (request: FastifyRequest, reply: FastifyReply) => Promise<void>;
   }
 }
 

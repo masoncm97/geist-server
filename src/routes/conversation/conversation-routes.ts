@@ -10,6 +10,7 @@ export const conversationRoutes: FastifyPluginAsync = async (
   server: FastifyInstance
 ) => {
   server.post("/start-conversation", {
+    preHandler: server.authenticate,
     schema: {
       request: {
         body: Type.Object({
@@ -26,6 +27,7 @@ export const conversationRoutes: FastifyPluginAsync = async (
       handleStartConversation(server, request, reply),
   });
   server.post("/stop-conversation", {
+    preHandler: server.authenticate,
     schema: {
       response: {
         200: Type.Object({
@@ -36,6 +38,7 @@ export const conversationRoutes: FastifyPluginAsync = async (
     handler: (request, reply) => handleStopConversation(server, request, reply),
   });
   server.get("/conversation-status", {
+    preHandler: server.authenticate,
     schema: {
       response: {
         200: Type.Object({

@@ -17,8 +17,7 @@ const createServer = async () => {
 
   await server.register(config);
   await server.register(cors, { 
-    // origin: process.env.NODE_ENV === 'production' ? "https://geist.masonmathai.com" : "*",
-    origin: "*",
+    origin: process.env.NODE_ENV === 'production' ? "https://geist.masonmathai.com" : "*",
     credentials: true 
   });
   await server.register(prismaClient);
